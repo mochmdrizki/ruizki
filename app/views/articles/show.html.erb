@@ -1,0 +1,31 @@
+<h1><%= @article.title %></h1>
+<h5><%=l @article.created_at, format: :long %> by Admin</h5>
+<%= image_tag(@article.image, class: 'img-thumbnail') %>
+<br><br>
+<%= sanitize(@article.body) %>
+<p>Tags: <%= raw(@article.tag_list.map { |t| link_to t, tag_path(t) }.join(', ')) %></p>
+<hr>
+<h4>Add Comment</h4>
+<%= form_for([@article, @article.comments.build]) do |f| %>
+<p>
+  <%= f.label :commenter, 'Your Name', class: 'control-label' %>
+  <%= f.text_field :commenter, class: 'form-control' %>
+</p>
+<p>
+  <%= f.label :body, 'Your Comment', class: 'control-label' %>
+  <%= f.text_area :body, class: 'form-control', style: 'resize:none' %>
+</p>
+<p>
+  <%= f.submit nil, class: 'btn btn-primary' %>
+</p>
+<% end %>
+<table class="table table-striped table-condensed">
+  <% @article.comments.each do |comment| %>
+  <tr>
+    <td>
+      <h5><strong><%= comment.commenter %></strong> <%= comment.created_at %></h5>
+      <%= comment.body %>
+    </td>
+  </tr>
+  <% end %>
+</table>
